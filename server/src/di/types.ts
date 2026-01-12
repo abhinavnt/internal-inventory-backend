@@ -9,4 +9,9 @@ export const TYPES = {
   CapitalHistoryRepository: Symbol.for("CapitalHistoryRepository"),
   CapitalService: Symbol.for("CapitalService"),
   CapitalController: Symbol.for("CapitalController"),
+
+  ProductRepository: Symbol.for("ProductRepository"),
+  StockHistoryRepository: Symbol.for("StockHistoryRepository"),
+  ProductService: Symbol.for("ProductService"),
+  ProductController:Symbol.for("ProductController")
 };

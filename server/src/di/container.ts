@@ -18,6 +18,14 @@ import { ICapitalService } from "../core/interfaces/services/ICapitalService";
 import { CapitalService } from "../services/capital.service";
 import { ICapitalHistoryRepository } from "../core/interfaces/repository/ICapitalHistoryRepository";
 import { CapitalHistoryRepository } from "../repositories/capitalHistory.repository";
+import { IProductRepository } from "../core/interfaces/repository/IProductRepository";
+import { ProductRepository } from "../repositories/product.repository";
+import { IStockHistoryRepository } from "../core/interfaces/repository/IStockHistoryRepository";
+import { StockHistoryRepository } from "../repositories/stockHistory.repository";
+import { IProductService } from "../core/interfaces/services/IProductService";
+import { ProductService } from "../services/product.service";
+import { IProductController } from "../core/interfaces/controllers/IProductController";
+import { ProductController } from "../controllers/product.controller";
 
 
 const container = new Container();
@@ -33,6 +41,11 @@ container.bind<ICapitalHistoryRepository>(TYPES.CapitalHistoryRepository).to(Cap
 container.bind<IActivityLogRepository>(TYPES.ActivityLogRepository).to(ActivityLogRepository)
 container.bind<IActivityLogService>(TYPES.ActivityLogService).to(ActivityLogService)
 container.bind<IActivityLogController>(TYPES.ActivityLogController).to(ActivityLogController)
+
+container.bind<IProductRepository>(TYPES.ProductRepository).to(ProductRepository);
+container.bind<IStockHistoryRepository>(TYPES.StockHistoryRepository).to(StockHistoryRepository);
+container.bind<IProductService>(TYPES.ProductService).to(ProductService);
+container.bind<IProductController>(TYPES.ProductController).to(ProductController)
 
 
 export default container;
