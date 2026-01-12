@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const types_1 = require("../di/types");
+const container_1 = __importDefault(require("../di/container"));
+dotenv_1.default.config();
+const router = express_1.default.Router();
+const authController = container_1.default.get(types_1.TYPES.AuthController);
+router.post("/register", authController.register);
+router.post("/login", authController.login);
+router.post("/otpverify", authController.verifyOtp);
+router.post("/refresh-token", authController.refreshToken);
+router.post("/logout", authController.logout);
+router.post("/resend-otp", authController.resendOtp);
+router.post("/verify-cookie", authController.verifyCookie);
+exports.default = router;
