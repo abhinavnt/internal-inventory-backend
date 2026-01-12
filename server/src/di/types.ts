@@ -23,4 +23,8 @@ PromotionRepository: Symbol.for("PromotionRepository"),
 PromotionService: Symbol.for("PromotionService"),
 PromotionController: Symbol.for("PromotionController"),
 
+ExpenseRepository: Symbol.for("ExpenseRepository"),
+ExpenseService: Symbol.for("ExpenseService"),
+ExpenseController: Symbol.for("ExpenseController"),
+
 };

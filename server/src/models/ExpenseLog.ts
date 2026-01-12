@@ -1,25 +1,30 @@
 import { Schema, model, Document, Types } from "mongoose";
-import { AuditFields } from "./BaseAudit.model";
+
+export type ExpenseType = "PURCHASE" | "SHIPPING" | "MARKETING" | "OTHER";
 
 export interface IExpenseLog extends Document {
-  _id: Types.ObjectId;
+  _id:Types.ObjectId
   productId?: Types.ObjectId;
-  type: "purchase" | "shipping" | "marketing" | "other";
+  type: ExpenseType;
   amount: number;
-  note?: string;
+  description?: string;
   createdBy: Types.ObjectId;
-  updatedBy?: Types.ObjectId;
+  createdAt: Date;
 }
 
 const ExpenseLogSchema = new Schema<IExpenseLog>(
   {
     productId: { type: Schema.Types.ObjectId, ref: "Product" },
-    type: { type: String, required: true },
-    amount: { type: Number, required: true },
-    note: String,
-    ...AuditFields,
+    type: {
+      type: String,
+      enum: ["PURCHASE", "SHIPPING", "MARKETING", "OTHER"],
+      required: true,
+    },
+    amount: { type: Number, required: true, min: 0 },
+    description: { type: String },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: true, updatedAt: false } }
 );
 
 export const ExpenseLog = model<IExpenseLog>(

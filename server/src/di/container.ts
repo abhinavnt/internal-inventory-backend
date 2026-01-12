@@ -38,6 +38,12 @@ import { IPromotionService } from "../core/interfaces/services/IPromotionService
 import { PromotionService } from "../services/promotion.service";
 import { IPromotionController } from "../core/interfaces/controllers/IPromotionController";
 import { PromotionController } from "../controllers/promotion.controller";
+import { IExpenseRepository } from "../core/interfaces/repository/IExpenseRepository";
+import { ExpenseRepository } from "../repositories/expense.repository";
+import { IExpenseService } from "../core/interfaces/services/IExpenseService";
+import { IExpenseController } from "../core/interfaces/controllers/IExpenseController";
+import { ExpenseService } from "../services/expense.service";
+import { ExpenseController } from "../controllers/expense.controller";
 
 
 const container = new Container();
@@ -66,6 +72,10 @@ container.bind<ISaleController>(TYPES.SaleController).to(SaleController);
 container.bind<IPromotionRepository>(TYPES.PromotionRepository).to(PromotionRepository);
 container.bind<IPromotionService>(TYPES.PromotionService).to(PromotionService);
 container.bind<IPromotionController>(TYPES.PromotionController).to(PromotionController);
+
+container.bind<IExpenseRepository>(TYPES.ExpenseRepository).to(ExpenseRepository);
+container.bind<IExpenseService>(TYPES.ExpenseService).to(ExpenseService);
+container.bind<IExpenseController>(TYPES.ExpenseController).to(ExpenseController);
 
 
 
