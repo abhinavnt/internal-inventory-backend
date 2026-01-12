@@ -26,6 +26,12 @@ import { IProductService } from "../core/interfaces/services/IProductService";
 import { ProductService } from "../services/product.service";
 import { IProductController } from "../core/interfaces/controllers/IProductController";
 import { ProductController } from "../controllers/product.controller";
+import { ISaleRepository } from "../core/interfaces/repository/ISaleRepository";
+import { SaleRepository } from "../repositories/sale.repository";
+import { ISaleService } from "../core/interfaces/services/ISaleService";
+import { SaleService } from "../services/sale.service";
+import { ISaleController } from "../core/interfaces/controllers/ISaleController";
+import { SaleController } from "../controllers/sale.controller";
 
 
 const container = new Container();
@@ -46,6 +52,11 @@ container.bind<IProductRepository>(TYPES.ProductRepository).to(ProductRepository
 container.bind<IStockHistoryRepository>(TYPES.StockHistoryRepository).to(StockHistoryRepository);
 container.bind<IProductService>(TYPES.ProductService).to(ProductService);
 container.bind<IProductController>(TYPES.ProductController).to(ProductController)
+
+container.bind<ISaleRepository>(TYPES.SaleRepository).to(SaleRepository);
+container.bind<ISaleService>(TYPES.SaleService).to(SaleService);
+container.bind<ISaleController>(TYPES.SaleController).to(SaleController);
+
 
 
 export default container;
