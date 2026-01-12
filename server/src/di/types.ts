@@ -27,4 +27,7 @@ ExpenseRepository: Symbol.for("ExpenseRepository"),
 ExpenseService: Symbol.for("ExpenseService"),
 ExpenseController: Symbol.for("ExpenseController"),
 
+DashboardService: Symbol.for("DashboardService"),
+DashboardController: Symbol.for("DashboardController"),
+
 };

@@ -44,6 +44,10 @@ import { IExpenseService } from "../core/interfaces/services/IExpenseService";
 import { IExpenseController } from "../core/interfaces/controllers/IExpenseController";
 import { ExpenseService } from "../services/expense.service";
 import { ExpenseController } from "../controllers/expense.controller";
+import { DashboardService } from "../services/dashboard.service";
+import { IDashboardService } from "../core/interfaces/services/IDashboardService";
+import { IDashboardController } from "../core/interfaces/controllers/IDashboardController";
+import { DashboardController } from "../controllers/dashboard.controller";
 
 
 const container = new Container();
@@ -77,6 +81,8 @@ container.bind<IExpenseRepository>(TYPES.ExpenseRepository).to(ExpenseRepository
 container.bind<IExpenseService>(TYPES.ExpenseService).to(ExpenseService);
 container.bind<IExpenseController>(TYPES.ExpenseController).to(ExpenseController);
 
+container.bind<IDashboardService>(TYPES.DashboardService).to(DashboardService);
+container.bind<IDashboardController>(TYPES.DashboardController).to(DashboardController);
 
 
 export default container;
