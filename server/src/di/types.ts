@@ -19,4 +19,8 @@ export const TYPES = {
 SaleService: Symbol.for("SaleService"),
 SaleController: Symbol.for("SaleController"),
 
+PromotionRepository: Symbol.for("PromotionRepository"),
+PromotionService: Symbol.for("PromotionService"),
+PromotionController: Symbol.for("PromotionController"),
+
 };

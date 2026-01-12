@@ -1,31 +1,29 @@
 import { Schema, model, Document, Types } from "mongoose";
-import { AuditFields } from "./BaseAudit.model";
 
 export interface IPromotion extends Document {
-  _id: Types.ObjectId;
+_id:Types.ObjectId
   productId: Types.ObjectId;
   influencerName: string;
-  socialLink?: string;
+  socialLinks?: string;
   amountPaid: number;
   campaignDate: Date;
   notes?: string;
   createdBy: Types.ObjectId;
   updatedBy?: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const PromotionSchema = new Schema<IPromotion>(
   {
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
-      required: true,
-    },
+    productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
     influencerName: { type: String, required: true },
-    socialLink: String,
-    amountPaid: { type: Number, required: true },
+    socialLinks: { type: String },
+    amountPaid: { type: Number, required: true, min: 0 },
     campaignDate: { type: Date, required: true },
-    notes: String,
-    ...AuditFields,
+    notes: { type: String },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    updatedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

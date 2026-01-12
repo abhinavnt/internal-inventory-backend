@@ -32,6 +32,12 @@ import { ISaleService } from "../core/interfaces/services/ISaleService";
 import { SaleService } from "../services/sale.service";
 import { ISaleController } from "../core/interfaces/controllers/ISaleController";
 import { SaleController } from "../controllers/sale.controller";
+import { IPromotionRepository } from "../core/interfaces/repository/IPromotionRepository";
+import { PromotionRepository } from "../repositories/promotion.repository";
+import { IPromotionService } from "../core/interfaces/services/IPromotionService";
+import { PromotionService } from "../services/promotion.service";
+import { IPromotionController } from "../core/interfaces/controllers/IPromotionController";
+import { PromotionController } from "../controllers/promotion.controller";
 
 
 const container = new Container();
@@ -56,6 +62,10 @@ container.bind<IProductController>(TYPES.ProductController).to(ProductController
 container.bind<ISaleRepository>(TYPES.SaleRepository).to(SaleRepository);
 container.bind<ISaleService>(TYPES.SaleService).to(SaleService);
 container.bind<ISaleController>(TYPES.SaleController).to(SaleController);
+
+container.bind<IPromotionRepository>(TYPES.PromotionRepository).to(PromotionRepository);
+container.bind<IPromotionService>(TYPES.PromotionService).to(PromotionService);
+container.bind<IPromotionController>(TYPES.PromotionController).to(PromotionController);
 
 
 
