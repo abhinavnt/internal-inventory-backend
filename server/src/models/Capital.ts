@@ -1,17 +1,21 @@
 import { Schema, model, Document, Types } from "mongoose";
-import { AuditFields } from "./BaseAudit.model";
 
 export interface ICapital extends Document {
-  _id: Types.ObjectId;
+_id:Types.ObjectId
   initialAmount: number;
+  notes?: string;
   createdBy: Types.ObjectId;
   updatedBy?: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const CapitalSchema = new Schema<ICapital>(
   {
-    initialAmount: { type: Number, required: true },
-    ...AuditFields,
+    initialAmount: { type: Number, required: true, min: 0 },
+    notes: { type: String },
+    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    updatedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

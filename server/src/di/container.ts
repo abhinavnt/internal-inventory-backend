@@ -14,6 +14,10 @@ import { IActivityLogService } from "../core/interfaces/services/IActivityLogSer
 import { ActivityLogService } from "../services/activityLog.service";
 import { IActivityLogController } from "../core/interfaces/controllers/IActivityLogController";
 import { ActivityLogController } from "../controllers/activityLog.controller";
+import { ICapitalService } from "../core/interfaces/services/ICapitalService";
+import { CapitalService } from "../services/capital.service";
+import { ICapitalHistoryRepository } from "../core/interfaces/repository/ICapitalHistoryRepository";
+import { CapitalHistoryRepository } from "../repositories/capitalHistory.repository";
 
 
 const container = new Container();
@@ -23,8 +27,12 @@ container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IAuthController>(TYPES.AuthController).to(AuthController);
 
 container.bind<ICapitalRepository>(TYPES.CapitalRepository).to(CapitalRepository)
+container.bind<ICapitalService>(TYPES.CapitalService).to(CapitalService)
+container.bind<ICapitalHistoryRepository>(TYPES.CapitalHistoryRepository).to(CapitalHistoryRepository)
+
 container.bind<IActivityLogRepository>(TYPES.ActivityLogRepository).to(ActivityLogRepository)
 container.bind<IActivityLogService>(TYPES.ActivityLogService).to(ActivityLogService)
 container.bind<IActivityLogController>(TYPES.ActivityLogController).to(ActivityLogController)
+
 
 export default container;
