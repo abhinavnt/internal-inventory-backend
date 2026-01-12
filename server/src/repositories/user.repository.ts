@@ -7,19 +7,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     super(User);
   }
 
-  create(data: Partial<IUser>): Promise<IUser> {
-    return this.create(data);
-  }
-
-  findByPhoneOrEmail(field: keyof IUser, value: string): Promise<IUser | null> {
-    return this.findOne({ [field]: value });
-  }
-
-  findByUserId(userId: string): Promise<IUser | null> {
-    return this.findById(userId);
-  }
-
-  updateUser(userId: string, data: Partial<IUser>): Promise<IUser | null> {
-    return this.findByIdAndUpdate(userId, data, { new: true });
+  findByEmail(email: string): Promise<IUser | null> {
+    return this.findOne({ email });
   }
 }

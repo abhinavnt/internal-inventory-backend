@@ -1,14 +1,7 @@
-import { RequestHandler } from "express"
+import { RequestHandler } from "express";
 
-
-
-
-
-export interface IAuthController{
-    register:RequestHandler
-    verifyOtp:RequestHandler
-    resendOtp:RequestHandler
-    login:RequestHandler
-    refreshToken:RequestHandler
-    logout:RequestHandler
+export interface IAuthController {
+  login: RequestHandler;
+  refreshToken: RequestHandler;
+  logout: RequestHandler;
 }
