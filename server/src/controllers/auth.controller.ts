@@ -12,6 +12,8 @@ export class AuthController implements IAuthController {
   constructor(@inject(TYPES.AuthService) private authService: IAuthService) {}
 
   login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    console.log("reached the login",req.body);
+    
     const dto = new LoginRequestDto(req.body);
     const { refreshToken, ...response } = await this.authService.login(dto);
 

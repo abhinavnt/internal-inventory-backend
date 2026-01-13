@@ -7,6 +7,7 @@ import { IPromotionController } from "../core/interfaces/controllers/IPromotionC
 import { IPromotionService } from "../core/interfaces/services/IPromotionService";
 import { CreatePromotionRequestDto } from "../dto/promotion/PromotionRequest.dto";
 import { HttpError } from "../utils/HttpError";
+import { AuthRequest } from "../types/auth-request";
 
 @injectable()
 export class PromotionController implements IPromotionController {
@@ -15,7 +16,7 @@ export class PromotionController implements IPromotionController {
     private promotionService: IPromotionService
   ) {}
 
-  private getAdminId(req: Request): string {
+  private getAdminId(req: AuthRequest): string {
     if (!req.user || !req.user._id) {
       throw new HttpError(401, "Unauthorized");
     }

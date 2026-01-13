@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Request, Response } from "express";
+import { Response } from "express";
 import asyncHandler from "express-async-handler";
 
 import { TYPES } from "../di/types";
@@ -7,6 +7,12 @@ import { IProductController } from "../core/interfaces/controllers/IProductContr
 import { IProductService } from "../core/interfaces/services/IProductService";
 import { CreateProductRequestDto, UpdateProductRequestDto } from "../dto/product/ProductRequest.dto";
 import { HttpError } from "../utils/HttpError";
+import { IUser } from "../models/User";
+import { Request } from "express";
+
+interface AuthRequest extends Request {
+  user?: Partial<IUser>;
+}
 
 @injectable()
 export class ProductController implements IProductController {
@@ -15,14 +21,14 @@ export class ProductController implements IProductController {
     private productService: IProductService
   ) {}
 
-  private getAdminId(req: Request): string {
+  private getAdminId(req: AuthRequest): string {
     if (!req.user || !req.user._id) {
       throw new HttpError(401, "Unauthorized");
     }
     return req.user._id.toString();
   }
 
-  create = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  create = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const dto = new CreateProductRequestDto(req.body);
     const adminId = this.getAdminId(req);
 
@@ -30,12 +36,11 @@ export class ProductController implements IProductController {
     res.status(201).json(product);
   });
 
-  update = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  update = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const dto = new UpdateProductRequestDto(req.body);
     const adminId = this.getAdminId(req);
 
     const product = await this.productService.updateProduct(req.params.id, dto, adminId);
-
     res.status(200).json(product);
   });
 
@@ -45,7 +50,6 @@ export class ProductController implements IProductController {
     const search = req.query.search?.toString();
 
     const result = await this.productService.getProducts(page, limit, search);
-
     res.status(200).json(result);
   });
 

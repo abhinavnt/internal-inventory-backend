@@ -7,6 +7,7 @@ import { ISaleController } from "../core/interfaces/controllers/ISaleController"
 import { ISaleService } from "../core/interfaces/services/ISaleService";
 import { CreateSaleRequestDto } from "../dto/sales/SaleRequest.dto";
 import { HttpError } from "../utils/HttpError";
+import { AuthRequest } from "../types/auth-request";
 
 @injectable()
 export class SaleController implements ISaleController {
@@ -15,7 +16,7 @@ export class SaleController implements ISaleController {
     private saleService: ISaleService
   ) {}
 
-  private getAdminId(req: Request): string {
+  private getAdminId(req: AuthRequest): string {
     if (!req.user || !req.user._id) {
       throw new HttpError(401, "Unauthorized");
     }

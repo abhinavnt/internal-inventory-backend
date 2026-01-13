@@ -7,6 +7,7 @@ import { ICapitalController } from "../core/interfaces/controllers/ICapitalContr
 import { ICapitalService } from "../core/interfaces/services/ICapitalService";
 import { CreateCapitalRequestDto, UpdateCapitalRequestDto } from "../dto/capital/CapitalRequest.dto";
 import { HttpError } from "../utils/HttpError";
+import { AuthRequest } from "../types/auth-request";
 
 @injectable()
 export class CapitalController implements ICapitalController {
@@ -15,7 +16,7 @@ export class CapitalController implements ICapitalController {
     private capitalService: ICapitalService
   ) {}
 
-  private getAdminId(req: Request): string {
+  private getAdminId(req: AuthRequest): string {
     if (!req.user || !req.user._id) {
       throw new HttpError(401, "Unauthorized");
     }

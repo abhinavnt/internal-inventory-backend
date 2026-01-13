@@ -7,6 +7,7 @@ import { IExpenseController } from "../core/interfaces/controllers/IExpenseContr
 import { IExpenseService } from "../core/interfaces/services/IExpenseService";
 import { CreateExpenseRequestDto } from "../dto/expense/ExpenseRequest.dto";
 import { HttpError } from "../utils/HttpError";
+import { AuthRequest } from "../types/auth-request";
 
 @injectable()
 export class ExpenseController implements IExpenseController {
@@ -15,7 +16,7 @@ export class ExpenseController implements IExpenseController {
     private expenseService: IExpenseService
   ) {}
 
-  private getAdminId(req: Request): string {
+  private getAdminId(req: AuthRequest): string {
     if (!req.user || !req.user._id) {
       throw new HttpError(401, "Unauthorized");
     }
