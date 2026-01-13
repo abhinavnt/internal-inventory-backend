@@ -52,17 +52,19 @@ export class PromotionService implements IPromotionService {
     return new PromotionResponseDto(promotion);
   }
 
-  async getPromotionsByProduct(productId: string, page: number, limit: number): Promise<{ data: PromotionResponseDto[]; total: number }> {
-    const skip = (page - 1) * limit;
+ async getPromotionsByProduct(productId: string, page: number, limit: number) {
+  const skip = (page - 1) * limit;
 
-    const [promotions, total] = await Promise.all([
-      this.promotionRepo.findByProduct(productId, skip, limit),
-      this.promotionRepo.countByProduct(productId),
-    ]);
+  const [promotions, total, stats] = await Promise.all([
+    this.promotionRepo.findByProduct(productId, skip, limit),
+    this.promotionRepo.countByProduct(productId),
+    this.promotionRepo.getStatsByProduct(productId),
+  ]);
 
-    return {
-      data: promotions.map((p) => new PromotionResponseDto(p)),
-      total,
-    };
-  }
+  return {
+    data: promotions.map((p) => new PromotionResponseDto(p)),
+    total,
+    stats,
+  };
+}
 }

@@ -8,4 +8,7 @@ export interface IPromotionRepository {
     limit: number
   ): Promise<IPromotion[]>;
   countByProduct(productId: string): Promise<number>;
+  getStatsByProduct(productId: string): Promise<{
+    totalPromotionSpend: number;
+  }>;
 }

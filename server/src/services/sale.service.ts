@@ -72,14 +72,19 @@ export class SaleService implements ISaleService {
     return new SaleResponseDto(sale);
   }
 
-  async getSalesByProduct(productId: string, page: number, limit: number): Promise<{ data: SaleResponseDto[]; total: number }> {
-    const skip = (page - 1) * limit;
+  async getSalesByProduct(productId: string, page: number, limit: number) {
+  const skip = (page - 1) * limit;
 
-    const [sales, total] = await Promise.all([this.saleRepo.findByProduct(productId, skip, limit), this.saleRepo.countByProduct(productId)]);
+  const [sales, total, stats] = await Promise.all([
+    this.saleRepo.findByProduct(productId, skip, limit),
+    this.saleRepo.countByProduct(productId),
+    this.saleRepo.getStatsByProduct(productId),
+  ]);
 
-    return {
-      data: sales.map((s) => new SaleResponseDto(s)),
-      total,
-    };
-  }
+  return {
+    data: sales.map((s) => new SaleResponseDto(s)),
+    total,
+    stats,
+  };
+}
 }

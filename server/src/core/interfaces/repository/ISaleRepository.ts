@@ -9,6 +9,12 @@ export interface ISaleRepository {
   ): Promise<ISale[]>;
   countByProduct(productId: string): Promise<number>;
 
+   getStatsByProduct(productId: string): Promise<{
+    totalQuantitySold: number;
+    totalSalesAmount: number;
+    totalShippingCollected: number;
+  }>;
+
   getTotalRevenue(): Promise<number>;
   getRevenueByProduct(productId: string): Promise<number>;
 }
