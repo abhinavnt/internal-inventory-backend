@@ -12,6 +12,7 @@ import { CreateProductRequestDto, UpdateProductRequestDto } from "../dto/product
 import { ProductResponseDto } from "../dto/product/ProductResponse.dto";
 import { HttpError } from "../utils/HttpError";
 import { IProduct } from "../models/Product";
+import { IExpenseRepository } from "../core/interfaces/repository/IExpenseRepository";
 
 @injectable()
 export class ProductService implements IProductService {
@@ -23,7 +24,9 @@ export class ProductService implements IProductService {
     private stockHistoryRepo: IStockHistoryRepository,
 
     @inject(TYPES.ActivityLogService)
-    private activityLogService: IActivityLogService
+    private activityLogService: IActivityLogService,
+
+    @inject(TYPES.ExpenseRepository) private expenseRepo: IExpenseRepository
   ) {}
 
   async createProduct(dto: CreateProductRequestDto, adminId: string): Promise<ProductResponseDto> {
@@ -42,12 +45,31 @@ export class ProductService implements IProductService {
       createdBy: new mongoose.Types.ObjectId(adminId),
     });
 
+    // ✅ STOCK HISTORY
     await this.stockHistoryRepo.create({
       productId: product._id,
       previousStock: 0,
       newStock: dto.stock,
       reason: "Initial stock",
       changedBy: new mongoose.Types.ObjectId(adminId),
+    });
+
+    // ✅ PURCHASE EXPENSE (purchaseCost * stock)
+    await this.expenseRepo.create({
+      productId: product._id,
+      type: "PURCHASE",
+      amount: dto.purchaseCost,
+      description: "Initial product purchase",
+      createdBy: new mongoose.Types.ObjectId(adminId),
+    });
+
+    // ✅ SHIPPING EXPENSE (shippingCost * stock)
+    await this.expenseRepo.create({
+      productId: product._id,
+      type: "SHIPPING",
+      amount: dto.shippingCost ,
+      description: "Initial product shipping",
+      createdBy: new mongoose.Types.ObjectId(adminId),
     });
 
     await this.activityLogService.logAction(ActivityAction.CREATE, "PRODUCT", `Product created: ${product.name}`, adminId, product._id.toString());

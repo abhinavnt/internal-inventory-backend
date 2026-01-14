@@ -1,5 +1,5 @@
-import { CapitalResponseDto } from "../../../dto/capital/CapitalResponse.dto";
 import { CreateCapitalRequestDto, UpdateCapitalRequestDto } from "../../../dto/capital/CapitalRequest.dto";
+import { CapitalResponseDto } from "../../../dto/capital/CapitalResponse.dto";
 
 export interface ICapitalService {
   createInitialCapital(dto: CreateCapitalRequestDto, adminId: string): Promise<CapitalResponseDto>;

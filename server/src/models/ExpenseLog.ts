@@ -1,6 +1,12 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export type ExpenseType = "PURCHASE" | "SHIPPING" | "MARKETING" | "OTHER";
+export type ExpenseType =
+  | "PURCHASE"
+  | "SHIPPING"
+  | "CUSTOMER_SHIPPING"
+  | "PROMOTION"
+  | "MARKETING"
+  | "OTHER";
 
 export interface IExpenseLog extends Document {
   _id:Types.ObjectId
@@ -17,7 +23,7 @@ const ExpenseLogSchema = new Schema<IExpenseLog>(
     productId: { type: Schema.Types.ObjectId, ref: "Product" },
     type: {
       type: String,
-      enum: ["PURCHASE", "SHIPPING", "MARKETING", "OTHER"],
+      enum: ["PURCHASE", "SHIPPING", "MARKETING", "OTHER","PROMOTION"],
       required: true,
     },
     amount: { type: Number, required: true, min: 0 },

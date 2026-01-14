@@ -1,3 +1,5 @@
+// ✅ CHANGED – FULL FILE (supports create-if-not-exists)
+
 import { inject, injectable } from "inversify";
 import mongoose from "mongoose";
 
@@ -5,23 +7,30 @@ import { TYPES } from "../di/types";
 import { ICapitalService } from "../core/interfaces/services/ICapitalService";
 import { ICapitalRepository } from "../core/interfaces/repository/ICapitalRepository";
 import { ICapitalHistoryRepository } from "../core/interfaces/repository/ICapitalHistoryRepository";
-import { CreateCapitalRequestDto, UpdateCapitalRequestDto } from "../dto/capital/CapitalRequest.dto";
+
+import {
+  CreateCapitalRequestDto,
+  UpdateCapitalRequestDto,
+} from "../dto/capital/CapitalRequest.dto";
 import { CapitalResponseDto } from "../dto/capital/CapitalResponse.dto";
-import { HttpError } from "../utils/HttpError";
 
 @injectable()
 export class CapitalService implements ICapitalService {
   constructor(
     @inject(TYPES.CapitalRepository)
     private capitalRepo: ICapitalRepository,
+
     @inject(TYPES.CapitalHistoryRepository)
     private historyRepo: ICapitalHistoryRepository
   ) {}
 
-  async createInitialCapital(dto: CreateCapitalRequestDto, adminId: string): Promise<CapitalResponseDto> {
+  async createInitialCapital(
+    dto: CreateCapitalRequestDto,
+    adminId: string
+  ): Promise<CapitalResponseDto> {
     const existing = await this.capitalRepo.findOne();
     if (existing) {
-      throw new HttpError(400, "Initial capital already exists");
+      return new CapitalResponseDto(existing);
     }
 
     const capital = await this.capitalRepo.create({
@@ -33,12 +42,24 @@ export class CapitalService implements ICapitalService {
     return new CapitalResponseDto(capital);
   }
 
-  async updateCapital(dto: UpdateCapitalRequestDto, adminId: string): Promise<CapitalResponseDto> {
+  async updateCapital(
+    dto: UpdateCapitalRequestDto,
+    adminId: string
+  ): Promise<CapitalResponseDto> {
     const capital = await this.capitalRepo.findOne();
+
+    // ✅ IF CAPITAL DOES NOT EXIST → CREATE IT
     if (!capital) {
-      throw new HttpError(404, "Capital not initialized");
+      const created = await this.capitalRepo.create({
+        initialAmount: dto.newAmount,
+        notes: dto.reason,
+        createdBy: new mongoose.Types.ObjectId(adminId),
+      });
+
+      return new CapitalResponseDto(created);
     }
 
+    // ✅ STORE HISTORY ONLY FOR UPDATES
     await this.historyRepo.create({
       previousAmount: capital.initialAmount,
       newAmount: dto.newAmount,
@@ -51,11 +72,7 @@ export class CapitalService implements ICapitalService {
       updatedBy: new mongoose.Types.ObjectId(adminId),
     });
 
-    if (!updated) {
-      throw new HttpError(500, "Failed to update capital");
-    }
-
-    return new CapitalResponseDto(updated);
+    return new CapitalResponseDto(updated!);
   }
 
   async getCapital(): Promise<CapitalResponseDto | null> {

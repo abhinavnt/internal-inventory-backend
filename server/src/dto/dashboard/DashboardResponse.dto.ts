@@ -1,27 +1,8 @@
-export class ProductProfitDto {
-  productId: string;
-  name: string;
-  stock: number;
-  totalRevenue: number;
-  totalExpense: number;
-  profit: number;
+// ✅ CHANGED – added capitalHistory
 
-  constructor(data: {
-    productId: string;
-    name: string;
-    stock: number;
-    totalRevenue: number;
-    totalExpense: number;
-    profit: number;
-  }) {
-    this.productId = data.productId;
-    this.name = data.name;
-    this.stock = data.stock;
-    this.totalRevenue = data.totalRevenue;
-    this.totalExpense = data.totalExpense;
-    this.profit = data.profit;
-  }
-}
+import { CapitalHistoryResponseDto } from "../capital history/CapitalHistoryResponse.dto";
+import { ProductProfitDto } from "./ProductProfitDto";
+
 
 export class DashboardResponseDto {
   initialCapital: number;
@@ -29,9 +10,12 @@ export class DashboardResponseDto {
   totalRevenue: number;
   totalExpense: number;
   netProfit: number;
+
   lowStockProducts: ProductProfitDto[];
   topSellingProducts: ProductProfitDto[];
   highestProfitProducts: ProductProfitDto[];
+
+  capitalHistory: CapitalHistoryResponseDto[];
 
   constructor(data: {
     initialCapital: number;
@@ -42,6 +26,7 @@ export class DashboardResponseDto {
     lowStockProducts: ProductProfitDto[];
     topSellingProducts: ProductProfitDto[];
     highestProfitProducts: ProductProfitDto[];
+    capitalHistory: CapitalHistoryResponseDto[];
   }) {
     this.initialCapital = data.initialCapital;
     this.availableBalance = data.availableBalance;
@@ -51,5 +36,6 @@ export class DashboardResponseDto {
     this.lowStockProducts = data.lowStockProducts;
     this.topSellingProducts = data.topSellingProducts;
     this.highestProfitProducts = data.highestProfitProducts;
+    this.capitalHistory = data.capitalHistory;
   }
 }

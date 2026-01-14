@@ -11,6 +11,7 @@ import { ActivityAction } from "../core/constants/activity.enum";
 import { CreatePromotionRequestDto } from "../dto/promotion/PromotionRequest.dto";
 import { PromotionResponseDto } from "../dto/promotion/PromotionResponse.dto";
 import { HttpError } from "../utils/HttpError";
+import { IExpenseRepository } from "../core/interfaces/repository/IExpenseRepository";
 
 @injectable()
 export class PromotionService implements IPromotionService {
@@ -22,7 +23,9 @@ export class PromotionService implements IPromotionService {
     private productRepo: IProductRepository,
 
     @inject(TYPES.ActivityLogService)
-    private activityLogService: IActivityLogService
+    private activityLogService: IActivityLogService,
+
+    @inject(TYPES.ExpenseRepository) private expenseRepo: IExpenseRepository
   ) {}
 
   async createPromotion(productId: string, dto: CreatePromotionRequestDto, adminId: string): Promise<PromotionResponseDto> {
@@ -49,22 +52,30 @@ export class PromotionService implements IPromotionService {
       promotion._id.toString()
     );
 
+    await this.expenseRepo.create({
+      productId: product._id,
+      type: "PROMOTION",
+      amount: dto.amountPaid,
+      description: `Promotion added for product ${product.name}`,
+      createdBy: new mongoose.Types.ObjectId(adminId),
+    });
+
     return new PromotionResponseDto(promotion);
   }
 
- async getPromotionsByProduct(productId: string, page: number, limit: number) {
-  const skip = (page - 1) * limit;
+  async getPromotionsByProduct(productId: string, page: number, limit: number) {
+    const skip = (page - 1) * limit;
 
-  const [promotions, total, stats] = await Promise.all([
-    this.promotionRepo.findByProduct(productId, skip, limit),
-    this.promotionRepo.countByProduct(productId),
-    this.promotionRepo.getStatsByProduct(productId),
-  ]);
+    const [promotions, total, stats] = await Promise.all([
+      this.promotionRepo.findByProduct(productId, skip, limit),
+      this.promotionRepo.countByProduct(productId),
+      this.promotionRepo.getStatsByProduct(productId),
+    ]);
 
-  return {
-    data: promotions.map((p) => new PromotionResponseDto(p)),
-    total,
-    stats,
-  };
-}
+    return {
+      data: promotions.map((p) => new PromotionResponseDto(p)),
+      total,
+      stats,
+    };
+  }
 }

@@ -11,6 +11,7 @@ import dashboardRoutes from "./routes/dashboard.routes"
 import productRoutes from "./routes/product.routes"
 import promotionRoutes from "./routes/promotion.routes"
 import saleRoutes from "./routes/sale.routes"
+import capitalRoutes from "./routes/capital.routes"
 
 
 dotenv.config();
@@ -46,6 +47,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/promotions", promotionRoutes);
 app.use("/api/sales", saleRoutes);
+app.use("/api/capital", capitalRoutes);
 
 
 app.use(errorHandler);
