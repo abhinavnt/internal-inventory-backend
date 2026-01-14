@@ -19,8 +19,9 @@ export class AuthController implements IAuthController {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,          
+      sameSite: "none",      
+      path: "/", 
     });
 
     res.status(200).json(response);
@@ -40,8 +41,9 @@ export class AuthController implements IAuthController {
   logout = asyncHandler(async (_req: Request, res: Response): Promise<void> => {
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,        
+      sameSite: "none",     
+      path: "/", 
     });
 
     res.status(200).json({ message: "Logged out successfully" });
