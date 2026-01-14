@@ -11,7 +11,30 @@ export class ActivityLogRepository extends BaseRepository<IActivityLog> implemen
     return this.create(data);
   }
 
-  findAll(): Promise<IActivityLog[]> {
-    return this.model.find().populate("performedBy", "name email").sort({ createdAt: -1 }).exec();
+  async findAllWithUser(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.model
+        .aggregate([
+          {
+            $lookup: {
+              from: "users",
+              localField: "performedBy",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          { $unwind: "$user" },
+          { $sort: { createdAt: -1 } },
+          { $skip: skip },
+          { $limit: limit },
+        ])
+        .exec(),
+
+      this.model.countDocuments(),
+    ]);
+
+    return { data, total };
   }
 }

@@ -6,6 +6,7 @@ import { IActivityLogService } from "../core/interfaces/services/IActivityLogSer
 import { IActivityLogRepository } from "../core/interfaces/repository/IActivityLogRepository";
 import { ActivityAction } from "../core/constants/activity.enum";
 import { IActivityLog } from "../models/ActivityLog";
+import { ActivityLogListResponseDto } from "../dto/activity/ActivityLogListResponse.dto";
 
 @injectable()
 export class ActivityLogService implements IActivityLogService {
@@ -24,7 +25,22 @@ export class ActivityLogService implements IActivityLogService {
     });
   }
 
-  async getAllLogs(): Promise<IActivityLog[]> {
-    return this.activityRepo.findAll();
+  async getAllLogs(page: number, limit: number) {
+    const result = await this.activityRepo.findAllWithUser(page, limit);
+
+    return {
+      total: result.total,
+      data: result.data.map(
+        (log: any) =>
+          new ActivityLogListResponseDto({
+            _id: log._id.toString(),
+            action: log.action,
+            module: log.module,
+            description: log.description,
+            createdAt: log.createdAt,
+            user: log.user,
+          })
+      ),
+    };
   }
 }

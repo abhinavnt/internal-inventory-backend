@@ -13,8 +13,11 @@ export class ActivityLogController implements IActivityLogController {
     private activityLogService: IActivityLogService
   ) {}
 
-  getAll = asyncHandler(async (_req: Request, res: Response): Promise<void> => {
-    const logs = await this.activityLogService.getAllLogs();
-    res.status(200).json(logs);
+  getAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const result = await this.activityLogService.getAllLogs(page, limit);
+    res.status(200).json(result);
   });
 }
