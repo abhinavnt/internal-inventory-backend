@@ -8,6 +8,8 @@ export interface IUser extends Document {
   password: string;
   role: "admin";
   isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserSchema = new Schema<IUser>(
