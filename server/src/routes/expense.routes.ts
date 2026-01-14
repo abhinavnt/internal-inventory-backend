@@ -7,11 +7,10 @@ import { authMiddleware } from "../middlewares/authMiddleWare";
 
 const router = express.Router();
 
-const controller = container.get<IExpenseController>(
-  TYPES.ExpenseController
-);
+const controller = container.get<IExpenseController>(TYPES.ExpenseController);
 
 router.post("/", authMiddleware([UserRole.ADMIN]), controller.create);
+router.get("/", authMiddleware([UserRole.ADMIN]), controller.getAll);
 router.get("/product/:productId", authMiddleware([UserRole.ADMIN]), controller.getProductExpense);
 router.get("/total", authMiddleware([UserRole.ADMIN]), controller.getTotalExpense);
 

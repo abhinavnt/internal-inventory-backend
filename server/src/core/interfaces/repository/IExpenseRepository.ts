@@ -5,4 +5,5 @@ export interface IExpenseRepository {
   findByProduct(productId: string): Promise<IExpenseLog[]>;
   getTotalExpense(): Promise<number>;
   getTotalExpenseByProduct(productId: string): Promise<number>;
+  findAllWithUser(page: number, limit: number): Promise<{ data: IExpenseLog[]; total: number }>;
 }

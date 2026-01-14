@@ -31,19 +31,21 @@ export class ExpenseController implements IExpenseController {
     res.status(201).json(expense);
   });
 
-  getProductExpense = asyncHandler(
-    async (req: Request, res: Response): Promise<void> => {
-      const total = await this.expenseService.getProductExpense(
-        req.params.productId
-      );
-      res.status(200).json({ totalExpense: total });
-    }
-  );
+  getProductExpense = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const total = await this.expenseService.getProductExpense(req.params.productId);
+    res.status(200).json({ totalExpense: total });
+  });
 
-  getTotalExpense = asyncHandler(
-    async (_req: Request, res: Response): Promise<void> => {
-      const total = await this.expenseService.getTotalExpense();
-      res.status(200).json({ totalExpense: total });
-    }
-  );
+  getTotalExpense = asyncHandler(async (_req: Request, res: Response): Promise<void> => {
+    const total = await this.expenseService.getTotalExpense();
+    res.status(200).json({ totalExpense: total });
+  });
+
+  getAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const result = await this.expenseService.getAllExpenses(page, limit);
+    res.status(200).json(result);
+  });
 }

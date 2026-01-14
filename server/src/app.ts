@@ -12,6 +12,7 @@ import productRoutes from "./routes/product.routes"
 import promotionRoutes from "./routes/promotion.routes"
 import saleRoutes from "./routes/sale.routes"
 import capitalRoutes from "./routes/capital.routes"
+import expensesRoutes from "./routes/expense.routes"
 
 
 dotenv.config();
@@ -48,6 +49,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/promotions", promotionRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/capital", capitalRoutes);
+app.use("/api/expenses",expensesRoutes)
 
 
 app.use(errorHandler);

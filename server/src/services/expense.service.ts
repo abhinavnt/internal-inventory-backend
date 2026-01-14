@@ -11,6 +11,7 @@ import { ActivityAction } from "../core/constants/activity.enum";
 import { CreateExpenseRequestDto } from "../dto/expense/ExpenseRequest.dto";
 import { ExpenseResponseDto } from "../dto/expense/ExpenseResponse.dto";
 import { HttpError } from "../utils/HttpError";
+import { ExpenseListResponseDto } from "../dto/expense/ExpenseListResponse.dto";
 
 @injectable()
 export class ExpenseService implements IExpenseService {
@@ -25,10 +26,7 @@ export class ExpenseService implements IExpenseService {
     private activityLogService: IActivityLogService
   ) {}
 
-  async createExpense(
-    dto: CreateExpenseRequestDto,
-    adminId: string
-  ): Promise<ExpenseResponseDto> {
+  async createExpense(dto: CreateExpenseRequestDto, adminId: string): Promise<ExpenseResponseDto> {
     if (dto.productId) {
       const product = await this.productRepo.findById(dto.productId);
       if (!product || product.isDeleted) {
@@ -37,22 +35,14 @@ export class ExpenseService implements IExpenseService {
     }
 
     const expense = await this.expenseRepo.create({
-      productId: dto.productId
-        ? new mongoose.Types.ObjectId(dto.productId)
-        : undefined,
+      productId: dto.productId ? new mongoose.Types.ObjectId(dto.productId) : undefined,
       type: dto.type,
       amount: dto.amount,
       description: dto.description,
       createdBy: new mongoose.Types.ObjectId(adminId),
     });
 
-    await this.activityLogService.logAction(
-      ActivityAction.CREATE,
-      "EXPENSE",
-      `Expense logged: ${dto.type}`,
-      adminId,
-      expense._id.toString()
-    );
+    await this.activityLogService.logAction(ActivityAction.CREATE, "EXPENSE", `Expense logged: ${dto.type}`, adminId, expense._id.toString());
 
     return new ExpenseResponseDto(expense);
   }
@@ -63,5 +53,25 @@ export class ExpenseService implements IExpenseService {
 
   async getTotalExpense(): Promise<number> {
     return this.expenseRepo.getTotalExpense();
+  }
+
+  async getAllExpenses(page: number, limit: number) {
+    const result = await this.expenseRepo.findAllWithUser(page, limit);
+
+    return {
+      total: result.total,
+      data: result.data.map(
+        (e: any) =>
+          new ExpenseListResponseDto({
+            _id: e._id.toString(),
+            type: e.type,
+            amount: e.amount,
+            description: e.description,
+            createdAt: e.createdAt,
+            user: e.user,
+            product: e.product,
+          })
+      ),
+    };
   }
 }
